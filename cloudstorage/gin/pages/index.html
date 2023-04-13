@@ -1,0 +1,85 @@
+{{ define "index.html" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文件上传和下载</title>
+{{if .Username}}
+{{else}}
+<script src="/static/script/jquery-1.7.2.js"></script>
+<script>
+	$(function(){
+        $(".deletefile").click(function(){
+			return confirm("确认删除文件吗？");
+		});
+
+		$(".upload").click(function(){
+			var username = $(this).attr("user");
+			var mes = "请先登录!"
+            $.get("/index",function(username){
+                alert(mes)
+                location = "/login"
+            })
+		});
+
+        $(".download").click(function(){
+			var username = $(this).attr("user");
+			var mes = "请先登录!"
+            $.get("/index",function(username){
+                alert(mes)
+                location = "/index"
+            })
+		});
+	});
+</script>
+{{end}}
+</head>
+<body>
+    <div id="header">
+        <!-- <img class="logo_img" alt="" src="/static/img/logo.gif" > -->
+        <span class="wel_word">云储存</span>
+        {{if .Username}}
+        <div>
+            <span>用户: {{.Username}}</span> | 
+            <a href="/logout">注销</a> &nbsp;&nbsp;
+            {{if .IsVIP}}
+            <span>VIP用户</span> 
+            {{else}}
+            <a href="/registVIP">开通会员</a> &nbsp;&nbsp;
+            {{end}}
+        </div>
+        {{else}}
+        <div>
+            <a href="/login">登录</a> | 
+            <a href="/regist">注册</a> &nbsp;&nbsp;
+            <!-- <a href="/pages/manager/manager.html">后台管理</a> -->
+        </div>
+        {{end}}
+    </div>
+    <h2>上传文件</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="file">选择文件:</label>
+        <input type="file" name="file" id="file"><br><br>
+        <input type="submit" name="submit" value="上传" user="{{.Username}}" class="upload">
+    </form>
+
+    <br><br>
+
+    <h2>下载文件</h2>
+    <form action="/download" method="get">
+        <label for="filename">文件名:</label>
+        <input type="text" name="filename" id="filename"><br><br>
+        <input type="submit" name="submit" value="下载" user="{{.Username}}" class="download">
+    </form>
+    <h2>我的文件</h2>
+    {{range .Contents}}
+    <tr>
+        <td>{{.}}</td>
+        <!-- <td class="deletefile"><a filename="{{.}}" href="/delete?filename={{.}}">删除</a></td> -->
+        <a href="/delete?filename={{.}}" class="deletefile">删除文件</a>
+    </tr>
+    <br />
+    <br />
+    {{end}}
+</body>
+</html>
+{{end}}

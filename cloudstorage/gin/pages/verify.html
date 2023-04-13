@@ -1,0 +1,17 @@
+{{ define "verify.html" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>邮箱验证</title>
+</head>
+<body>
+    <h2>验证邮箱</h2>
+    <form action="/verify" method="post">
+        <label for="code">已向您的邮箱发送验证码邮件，请输入邮箱验证码:</label>
+        <input type="code" name="code" id="code"><br><br>
+        <input type="submit" name="submit" value="确认">
+        <span class="errorMsg">{{.}}</span>
+    </form>
+</body>
+</html>
+{{end}}

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package pbfile;
+
+option go_package = "./pbfile";
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string username = 1;
+    string cookie = 2;
+    string VIP = 3;
+}
+
+message Cookie {
+    string code = 1;
+}
+
+message RegistRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+}
+
+message VerifyRequest {
+    string cookie = 1;
+    string code = 2;
+}
+
+message VerifyResponse {
+    bool result = 1;
+}
+
+message RegistResponse {
+    string cookie = 1;
+}
+
+service LoginService {
+    rpc Login(LoginRequest) returns(LoginResponse);
+    rpc Regist(RegistRequest) returns(RegistResponse);
+    rpc Verify(VerifyRequest) returns(VerifyResponse);
+    rpc GetSession(Cookie) returns(LoginResponse);
+    rpc Logout(Cookie) returns(Cookie);
+    rpc RegistVIP(Cookie) returns(VerifyResponse);
+}

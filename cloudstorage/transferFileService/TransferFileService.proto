@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package pbfile;
+
+option go_package="./pbfile";
+
+// 定义上传文件请求和响应消息
+message UploadRequest {
+  string file_name = 1;
+  bytes file_content = 2;
+  string username = 3;
+}
+
+message UploadResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// 定义下载文件请求和响应消息
+message DownloadRequest {
+  string file_name = 1;
+  string username = 2;
+}
+
+message DownloadResponse {
+  bytes file_content = 1;
+}
+
+message DirResponse {
+  repeated string Contents = 1;
+}
+
+// 定义文件传输服务
+service FileTransferService {
+  // 上传文件
+  rpc UploadFile (stream UploadRequest) returns (UploadResponse);
+
+  // 下载文件
+  rpc DownloadFile (DownloadRequest) returns (stream DownloadResponse);
+
+  // 显示用户空间
+  rpc ShowDir (UploadRequest) returns (DirResponse);
+
+  rpc CreateDir (UploadRequest) returns (UploadRequest);
+
+  rpc DeleteFile (UploadRequest) returns (UploadRequest);
+}
